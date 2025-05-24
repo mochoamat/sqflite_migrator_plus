@@ -31,7 +31,7 @@ flutter pub get
 import 'package:sqflite_migrator_plus/sqflite_migrator_plus.dart';
 
 // create_table_products
-class 202505091026_CreateTableProducts extends MigrationPlus {
+class Migration_202505091026_CreateTableProducts extends MigrationPlus {
   @override
   Future<void> execute(Database db) async {
     await db.execute('''
@@ -44,7 +44,7 @@ class 202505091026_CreateTableProducts extends MigrationPlus {
 }
 
 // add_price_to_products
-class 202505101415_AddPriceToProducts extends MigrationPlus {
+class Migration_202505101415_AddPriceToProducts extends MigrationPlus {
   @override
   Future<void> execute(Database db) async {
     await db.execute('ALTER TABLE products ADD COLUMN price REAL DEFAULT 0');
@@ -52,21 +52,37 @@ class 202505101415_AddPriceToProducts extends MigrationPlus {
 }
 
 final List<MigrationPlus> migrations = [
-  202505091026_CreateTableProducts(),
-  202505101415_AddPriceToProducts(),
+  Migration_202505091026_CreateTableProducts(),
+  Migration_202505101415_AddPriceToProducts(),
 ];
 ```
 
-### To keep in mind
-
-IMPORTANT: Always add new migrations to the end of the list, never in the middle.
-
-### Initialize your DB
+### METHOD 1: Using the Initializer
 
 ```dart
 final dbMigratorInitializer = DbMigratorInitializer(dbName: "my_database.db", migrations: migrations);
 final Database db = await dbMigratorInitializer.openAndRunMigrations();
 ```
+
+### To keep in mind with the Initializer
+
+IMPORTANT: Always add new migrations to the end of the list, never in the middle.
+
+
+### METHOD 2: Using the Runner
+
+The runner creates the table 'migrations' to track migrations.
+
+This way allows you to insert the new migration into any position of list.
+
+Of course, you can check which migrations have been run.
+
+```dart
+final Database db = await openDatabase("my_database.db");
+final DbMigratorRunner runner = DbMigratorRunner(migrationList: migrations);
+await runner.runMigrations(db);
+```
+
 
 ### Access your tables as usual
 
