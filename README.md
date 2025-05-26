@@ -25,7 +25,7 @@ flutter pub get
 
 ## 📄 How to use it?
 
-### Create your migrations
+### BASIC: Create your migrations
 
 ```dart
 import 'package:sqflite_migrator_plus/sqflite_migrator_plus.dart';
@@ -57,7 +57,56 @@ final List<MigrationPlus> migrations = [
 ];
 ```
 
-### METHOD 1: Using the Initializer
+### PROGRAMMATIC: Create your migrations
+
+With programmatic way you use our "SQL Statement Generator"
+
+* MigrationPlusGeneratorCreateTable
+* MigrationPlusGeneratorAlterTable
+
+Making easier for you to construct your migrations without having to write SQL statements manually.
+
+
+```dart
+import 'package:sqflite_common/sqlite_api.dart';
+import 'package:sqflite_migrator_plus/sqflite_migrator_plus.dart';
+
+// create table products
+class Migration_202505261951_create_table_products extends MigrationPlus {
+  @override
+  Future<void> execute(Database db) {
+    List<MigrationPlusColumn> columns = [
+      MigrationPlusColumn(columnName: 'id', type: MigrationPlusColumnTypes.integer, isPrimaryKey: true, isAutoIncrement: true),
+      MigrationPlusColumn(columnName: 'product_name', type: MigrationPlusColumnTypes.text),
+    ];
+
+    var generator = MigrationGeneratorCreateTable('products', columns);
+
+    return db.execute(generator.getSqlStatement());
+  }
+}
+
+// add_price_to_products
+class Migration_202505262211_add_price_table_products extends MigrationPlus {
+  @override
+  Future<void> execute(Database db) {
+    List<MigrationPlusColumn> columns = [
+      MigrationPlusColumn(alterColumnType: MigrationPlusAlterColumnType.add, columnName: 'price', type: MigrationPlusColumnTypes.numeric, defaultValue: '0'),
+    ];
+
+    var generator = MigrationGeneratorAlterTable('products', columns);
+
+    return db.execute(generator.getSqlStatement());
+  }
+}
+
+final List<MigrationPlus> migrations = [
+  Migration_202505261951_create_table_products(),
+  Migration_202505262211_add_price_table_products(),
+];
+```
+
+### METHOD INITIALIZER: Using the Initializer
 
 ```dart
 final dbMigratorInitializer = DbMigratorInitializer(dbName: "my_database.db", migrations: migrations);
@@ -69,7 +118,7 @@ final Database db = await dbMigratorInitializer.openAndRunMigrations();
 IMPORTANT: Always add new migrations to the end of the list, never in the middle.
 
 
-### METHOD 2: Using the Runner
+### METHOD RUNNER: Using the Runner
 
 The runner creates the table 'migrations' to track migrations.
 
