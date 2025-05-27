@@ -2,19 +2,20 @@
 
 Managing your migrations with sqflite made a breeze in Flutter.
 
-## 📌 Recursos
+## 📌 Resources
 
 ✅ Create and update your table structures incrementally
+
 ✅ Easy table maintenance with no worries
 
-## 🚀 Instalação
+## 🚀 Instaling
 
 Add this dependecies to you `pubspec.yaml` file:
 
 ```yaml
 dependencies:
   sqflite: ^2.4.1
-  sqflite_migrator_plus: ^0.0.1
+  sqflite_migrator_plus: ^0.0.4
 ```
 
 Then run the command:
@@ -61,8 +62,8 @@ final List<MigrationPlus> migrations = [
 
 With programmatic way you use our "SQL Statement Generator"
 
-* MigrationPlusGeneratorCreateTable
-* MigrationPlusGeneratorAlterTable
+* CreateTableGenerator
+* AlterTableGenerator
 
 Making easier for you to construct your migrations without having to write SQL statements manually.
 
@@ -75,12 +76,12 @@ import 'package:sqflite_migrator_plus/sqflite_migrator_plus.dart';
 class Migration_202505261951_create_table_products extends MigrationPlus {
   @override
   Future<void> execute(Database db) {
-    List<MigrationPlusColumn> columns = [
-      MigrationPlusColumn(columnName: 'id', type: MigrationPlusColumnTypes.integer, isPrimaryKey: true, isAutoIncrement: true),
-      MigrationPlusColumn(columnName: 'product_name', type: MigrationPlusColumnTypes.text),
+    List<ColumnDef> columns = [
+      ColumnDef(columnName: 'id', type: ColumnTypes.integer, isPrimaryKey: true, isAutoIncrement: true),
+      ColumnDef(columnName: 'product_name', type: ColumnTypes.text),
     ];
 
-    var generator = MigrationGeneratorCreateTable('products', columns);
+    var generator = CreateTableGenerator('products', columns);
 
     return db.execute(generator.getSqlStatement());
   }
@@ -90,11 +91,11 @@ class Migration_202505261951_create_table_products extends MigrationPlus {
 class Migration_202505262211_add_price_table_products extends MigrationPlus {
   @override
   Future<void> execute(Database db) {
-    List<MigrationPlusColumn> columns = [
-      MigrationPlusColumn(alterColumnType: MigrationPlusAlterColumnType.add, columnName: 'price', type: MigrationPlusColumnTypes.numeric, defaultValue: '0'),
+    List<ColumnDef> columns = [
+      ColumnDef(alterColumnType: AlterColumnType.add, columnName: 'price', type: ColumnTypes.numeric, defaultValue: '0'),
     ];
 
-    var generator = MigrationGeneratorAlterTable('products', columns);
+    var generator = AlterTableGenerator('products', columns);
 
     return db.execute(generator.getSqlStatement());
   }

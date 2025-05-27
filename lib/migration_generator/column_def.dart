@@ -1,20 +1,20 @@
-import 'package:sqflite_migrator_plus/framework/migration_plus_alter_column_type.dart';
-import 'package:sqflite_migrator_plus/framework/migration_plus_column_types.dart';
-import 'package:sqflite_migrator_plus/framework/migration_plus_foreingkey.dart';
+import 'package:sqflite_migrator_plus/migration_generator/alter_column_type.dart';
+import 'package:sqflite_migrator_plus/migration_generator/column_types.dart';
+import 'package:sqflite_migrator_plus/migration_generator/foreingkey_ref.dart';
 
-class MigrationPlusColumn {
+class ColumnDef {
   final String columnName;
-  final MigrationPlusColumnTypes type;
+  final ColumnTypes type;
   final bool isPrimaryKey;
   final bool isUnique;
   final bool isAutoIncrement;
   final bool isNotNull;
   final String? defaultValue;
-  final MigrationPlusForeingkey? foreingKey;
-  final MigrationPlusAlterColumnType? alterColumnType;
+  final ForeingkeyRef? foreingKey;
+  final AlterColumnType? alterColumnType;
   final String? newColumnName;
 
-  MigrationPlusColumn({
+  ColumnDef({
     required this.columnName,
     required this.type,
     this.isPrimaryKey = false,

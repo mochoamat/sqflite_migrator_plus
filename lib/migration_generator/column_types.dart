@@ -1,4 +1,4 @@
-enum MigrationPlusColumnTypes {
+enum ColumnTypes {
   text,
   numeric,
   integer,

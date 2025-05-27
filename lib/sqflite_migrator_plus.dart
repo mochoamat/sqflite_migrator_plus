@@ -1,5 +1,5 @@
 library sqflite_migrator_plus;
 
-export './framework/migration_framework.dart';
-export './migrator_plus/db_migrator_initializer.dart';
-export './migrator_plus/db_migrator_runner.dart';
+export 'framework/migration_framework.export.dart';
+export './migrator_plus/migrator_plus.export.dart';
+export './migration_generator/migration_plus_generator.export.dart';

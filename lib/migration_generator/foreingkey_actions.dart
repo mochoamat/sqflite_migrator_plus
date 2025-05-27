@@ -1,4 +1,4 @@
-enum MigrationPlusForeingkeyActions {
+enum ForeingkeyActions {
   noAction,
   restrict,
   setNull,

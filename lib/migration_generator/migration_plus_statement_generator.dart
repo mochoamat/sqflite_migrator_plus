@@ -1,10 +1,10 @@
-import 'package:sqflite_migrator_plus/framework/migration_plus_alter_column_type.dart';
-import 'package:sqflite_migrator_plus/framework/migration_plus_column.dart';
+import 'package:sqflite_migrator_plus/migration_generator/alter_column_type.dart';
+import 'package:sqflite_migrator_plus/migration_generator/column_def.dart';
 
-import 'migration_plus_statement_generator_base.dart';
+import 'statement_generator_base.dart';
 
-class MigrationGeneratorCreateTable extends MigrationPlusStatementGeneratorBase {
-  MigrationGeneratorCreateTable(super.tableName, super.columns);
+class CreateTableGenerator extends StatementGeneratorBase {
+  CreateTableGenerator(super.tableName, super.columns);
 
   @override
   String getSqlStatement() {
@@ -22,15 +22,15 @@ class MigrationGeneratorCreateTable extends MigrationPlusStatementGeneratorBase 
     return lines.join('\n');
   }
 
-  String _genColumn(MigrationPlusColumn col, bool isLast) {
+  String _genColumn(ColumnDef col, bool isLast) {
     return '${col.columnName} ${col.type.name.toUpperCase()} ${getColumnSpec(col)}${isLast ? '' : ','}';
   }
 }
 
-class MigrationGeneratorAlterTable extends MigrationPlusStatementGeneratorBase {
+class AlterTableGenerator extends StatementGeneratorBase {
   final String? newTableName;
 
-  MigrationGeneratorAlterTable(super.tableName, super.columns, {this.newTableName});
+  AlterTableGenerator(super.tableName, super.columns, {this.newTableName});
 
   @override
   String getSqlStatement() {
@@ -48,19 +48,19 @@ class MigrationGeneratorAlterTable extends MigrationPlusStatementGeneratorBase {
     return lines.join('\n');
   }
 
-  String _genColumn(MigrationPlusColumn col) {
+  String _genColumn(ColumnDef col) {
     switch (col.alterColumnType) {
-      case MigrationPlusAlterColumnType.add:
+      case AlterColumnType.add:
         return 'ADD COLUMN ${col.columnName} ${col.type.name.toUpperCase()} ${getColumnSpec(col)}';
 
-      case MigrationPlusAlterColumnType.rename:
+      case AlterColumnType.rename:
         if (col.newColumnName == null) {
           throwMigrationException('newColumnName is null when renamin the column');
         }
 
         return 'RENAME COLUMN ${col.columnName} TO ${col.newColumnName}';
 
-      case MigrationPlusAlterColumnType.drop:
+      case AlterColumnType.drop:
         return 'DROP COLUMN ${col.columnName}';
 
       default:
