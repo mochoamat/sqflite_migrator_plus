@@ -15,7 +15,7 @@ Add this dependecies to you `pubspec.yaml` file:
 ```yaml
 dependencies:
   sqflite: ^2.4.1
-  sqflite_migrator_plus: ^0.0.4
+  sqflite_migrator_plus: ^1.0.0
 ```
 
 Then run the command:
@@ -82,8 +82,11 @@ class Migration_202505261951_create_table_products extends MigrationPlus {
     ];
 
     var generator = CreateTableGenerator('products', columns);
+    var strSqlList = generator.getSqlStatements();
 
-    return db.execute(generator.getSqlStatement());
+    for (String strSql in strSqlList) {
+      await db.execute(strSql);
+    }
   }
 }
 
@@ -93,17 +96,59 @@ class Migration_202505262211_add_price_table_products extends MigrationPlus {
   Future<void> execute(Database db) {
     List<ColumnDef> columns = [
       ColumnDef(alterColumnType: AlterColumnType.add, columnName: 'price', type: ColumnTypes.numeric, defaultValue: '0'),
+      ColumnDef(alterColumnType: AlterColumnType.add, columnName: 'category_id', type: ColumnTypes.numeric),
     ];
 
     var generator = AlterTableGenerator('products', columns);
+    var strSqlList = generator.getSqlStatements();
+
+    for (String strSql in strSqlList) {
+      await db.execute(strSql);
+    }
+  }
+}
+
+// create index
+class Migration_202505281425_create_index_category_id_table_products extends MigrationPlus {
+  @override
+  Future<void> execute(Database db) {
+    var indexGen = CreateIndexGenerator(
+      onTableName: 'products',
+      unique: false,
+      indexedColumns: ['category_id'],
+    );
 
     return db.execute(generator.getSqlStatement());
+
+    /* if you run the CreateIndexGenerator after the CreateTableGenerator
+       follow this  example:
+
+      List<ColumnDef> columns = [
+        ...
+      ];
+
+      var generator = CreateTableGenerator('products', columns);
+      var strSqlList = generator.getSqlStatements();
+
+      var indexGen = CreateIndexGenerator(
+        onTableName: 'products',
+        unique: false,
+        indexedColumns: ['category_id'],
+      );
+
+      strSqlList.add(indexGen.getSqlStatement());
+
+      for (String strSql in strSqlList) {
+        await db.execute(strSql);
+      }
+    */
   }
 }
 
 final List<MigrationPlus> migrations = [
   Migration_202505261951_create_table_products(),
   Migration_202505262211_add_price_table_products(),
+  Migration_202505281425_create_index_category_id_table_products(),
 ];
 ```
 
@@ -145,16 +190,24 @@ print(products);
 ### Smart and easy
 
 🔹 Don't loose your data on app updates
+
 🔹 Update your table schemas programmatically
+
 🔹 Runs needed migrtations only
+
 
 ### Contributions
 
 🔹 Make a repository fork
+
 🔹 Create a branch: git checkout -b my-branch
+
 🔹 Make a commit with your changes: git add . && git commit -m "Describe your feature"
+
 🔹 Upload your changes: git push origin my-branch
+
 🔹 Then create a Pull Request
+
 
 ### License
 

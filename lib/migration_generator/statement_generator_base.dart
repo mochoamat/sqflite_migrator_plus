@@ -8,7 +8,7 @@ abstract class StatementGeneratorBase {
 
   StatementGeneratorBase(this.tableName, this.columns);
 
-  String getSqlStatement();
+  List<String> getSqlStatements();
 
   String getColumnSpec(ColumnDef col) {
     String spec = '';

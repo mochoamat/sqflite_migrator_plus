@@ -1,6 +1,6 @@
 name: sqflite_migrator_plus
 description: "Managing your SQFLITE migrations made a breeze in Flutter."
-version: 0.0.4
+version: 1.0.0
 homepage: https://github.com/mochoamat/sqflite_migrator_plus
 repository: https://github.com/mochoamat/sqflite_migrator_plus
 

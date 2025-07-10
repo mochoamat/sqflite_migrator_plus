@@ -7,7 +7,7 @@ class CreateTableGenerator extends StatementGeneratorBase {
   CreateTableGenerator(super.tableName, super.columns);
 
   @override
-  String getSqlStatement() {
+  List<String> getSqlStatements() {
     var lines = <String>[];
     String stmt = 'CREATE TABLE $tableName (';
     String closingStmt = ');';
@@ -19,7 +19,7 @@ class CreateTableGenerator extends StatementGeneratorBase {
     }
     lines.add(closingStmt);
 
-    return lines.join('\n');
+    return [lines.join('\n')];
   }
 
   String _genColumn(ColumnDef col, bool isLast) {
@@ -33,7 +33,7 @@ class AlterTableGenerator extends StatementGeneratorBase {
   AlterTableGenerator(super.tableName, super.columns, {this.newTableName});
 
   @override
-  String getSqlStatement() {
+  List<String> getSqlStatements() {
     var lines = <String>[];
     String alterStmt = 'ALTER TABLE $tableName';
 
@@ -45,7 +45,7 @@ class AlterTableGenerator extends StatementGeneratorBase {
       lines.add('$alterStmt ${_genColumn(col)};');
     }
 
-    return lines.join('\n');
+    return lines;
   }
 
   String _genColumn(ColumnDef col) {
@@ -55,7 +55,7 @@ class AlterTableGenerator extends StatementGeneratorBase {
 
       case AlterColumnType.rename:
         if (col.newColumnName == null) {
-          throwMigrationException('newColumnName is null when renamin the column');
+          throwMigrationException('newColumnName is null. Required when renamin the column');
         }
 
         return 'RENAME COLUMN ${col.columnName} TO ${col.newColumnName}';
