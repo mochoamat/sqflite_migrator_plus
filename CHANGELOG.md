@@ -1,3 +1,10 @@
+
+## 1.0.1
+
+* Added support for onConfigure, onOpen, readOnly and singleInstance parameters to DbMigratorInitializer class
+
+* Added support for Windows, Linux and macOS platforms with sqflite_ffi
+
 ## 1.0.0
 
 ** Breaking change

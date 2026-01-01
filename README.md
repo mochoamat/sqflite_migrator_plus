@@ -159,6 +159,24 @@ final dbMigratorInitializer = DbMigratorInitializer(dbName: "my_database.db", mi
 final Database db = await dbMigratorInitializer.openAndRunMigrations();
 ```
 
+Example with onConfigure:
+
+```dart
+final dbMigratorInitializer = DbMigratorInitializer(dbName: "my_database.db", migrations: migrations, onConfigure: (db) {
+  db.execute('PRAGMA foreign_keys = ON');
+});
+final Database db = await dbMigratorInitializer.openAndRunMigrations();
+```
+
+For concurrency with background threads:
+
+```dart
+final dbMigratorInitializer = DbMigratorInitializer(dbName: "my_database.db", migrations: migrations, onConfigure: (db) async {
+  await db.rawQuery('PRAGMA journal_mode = WAL');
+});
+final Database db = await dbMigratorInitializer.openAndRunMigrations();
+```
+
 ### To keep in mind with the Initializer
 
 IMPORTANT: Always add new migrations to the end of the list, never in the middle.
@@ -214,7 +232,7 @@ print(products);
 This project is licensed under MIT License - Read the file LICENSE.
 
 
-### 🔗 Links Úteis
+### 🔗 UsefulLinks
 
 [Sqflite Docs]()
 [GitHub Repository]()
