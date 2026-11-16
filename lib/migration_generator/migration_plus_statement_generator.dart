@@ -55,7 +55,8 @@ class AlterTableGenerator extends StatementGeneratorBase {
 
       case AlterColumnType.rename:
         if (col.newColumnName == null) {
-          throwMigrationException('newColumnName is null. Required when renamin the column');
+          throwMigrationException(
+              'newColumnName is null. Required when renamin the column');
         }
 
         return 'RENAME COLUMN `${col.columnName}` TO ${col.newColumnName}';

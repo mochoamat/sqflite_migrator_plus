@@ -27,11 +27,13 @@ abstract class StatementGeneratorBase {
       spec += ' REFERENCES ${fk.table} (${fk.column})';
 
       if (fk.foreingKeyOnUpdate != null) {
-        spec += ' ON UPDATE ${ForeingkeyActionHelper.getActionString(fk.foreingKeyOnUpdate)}';
+        spec +=
+            ' ON UPDATE ${ForeingkeyActionHelper.getActionString(fk.foreingKeyOnUpdate)}';
       }
 
       if (fk.foreingKeyOnDelete != null) {
-        spec += ' ON DELETE ${ForeingkeyActionHelper.getActionString(fk.foreingKeyOnDelete)}';
+        spec +=
+            ' ON DELETE ${ForeingkeyActionHelper.getActionString(fk.foreingKeyOnDelete)}';
       }
     }
 
