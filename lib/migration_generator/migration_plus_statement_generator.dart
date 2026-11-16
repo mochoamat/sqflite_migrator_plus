@@ -23,7 +23,7 @@ class CreateTableGenerator extends StatementGeneratorBase {
   }
 
   String _genColumn(ColumnDef col, bool isLast) {
-    return '${col.columnName} ${col.type.name.toUpperCase()} ${getColumnSpec(col)}${isLast ? '' : ','}';
+    return '`${col.columnName}` ${col.type.name.toUpperCase()} ${getColumnSpec(col)}${isLast ? '' : ','}';
   }
 }
 
@@ -51,17 +51,17 @@ class AlterTableGenerator extends StatementGeneratorBase {
   String _genColumn(ColumnDef col) {
     switch (col.alterColumnType) {
       case AlterColumnType.add:
-        return 'ADD COLUMN ${col.columnName} ${col.type.name.toUpperCase()} ${getColumnSpec(col)}';
+        return 'ADD COLUMN `${col.columnName}` ${col.type.name.toUpperCase()} ${getColumnSpec(col)}';
 
       case AlterColumnType.rename:
         if (col.newColumnName == null) {
           throwMigrationException('newColumnName is null. Required when renamin the column');
         }
 
-        return 'RENAME COLUMN ${col.columnName} TO ${col.newColumnName}';
+        return 'RENAME COLUMN `${col.columnName}` TO ${col.newColumnName}';
 
       case AlterColumnType.drop:
-        return 'DROP COLUMN ${col.columnName}';
+        return 'DROP COLUMN `${col.columnName}`';
 
       default:
         throwMigrationException('alterColumnType is invalid');

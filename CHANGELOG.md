@@ -1,4 +1,8 @@
 
+## 1.0.2
+
+* Added support for special names in column using backquote " ` "
+
 ## 1.0.1
 
 * Added support for onConfigure, onOpen, readOnly and singleInstance parameters to DbMigratorInitializer class
